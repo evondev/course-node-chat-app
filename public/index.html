@@ -3,20 +3,10 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Node chat app</title>
-</head>
+</head> 
 <body>
 	<p>Node chat app</p>
 	<script src="/socket.io/socket.io.js"></script>
-	<script>
-		const socket = io();
-
-		socket.on('connect', () => {
-			console.log('Connected to server');
-		});
-
-		socket.on('disconnect', () => {
-			console.log('Disconnected from server');
-		});
-	</script>
+	<script src="/js/index.js"></script>
 </body>
 </html>
