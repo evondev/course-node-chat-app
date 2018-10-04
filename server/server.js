@@ -11,18 +11,17 @@ const io = socketIO(server);
 
 app.use(express.static(publicPath));
 
-// io.on is special not to make other
 io.on('connection', (socket) => {
 	console.log('New user connected');
-	// emit custom event from client
-	socket.emit('newMessage', {
-		from: 'John',
-		text: 'see you then',
-		createAt: 123123
-	});
-	// create custom event from server
+
 	socket.on('createMessage', (newMessage) => {
 		console.log('createMessage', newMessage);
+		// make for all tabs
+		io.emit('newMessage', {
+			from: newMessage.from,
+			text: newMessage.text,
+			createdAt: new Date().getTime()
+		});
 	});
 
 	socket.on('disconnect', () => {
