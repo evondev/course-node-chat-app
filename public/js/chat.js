@@ -90,7 +90,6 @@ locationButton.on('click', function () {
 	if (!navigator.geolocation) {
 		return alert('Geolocation not supported by your browser.');
 	}
-
 	locationButton.attr('disabled', 'disabled').text('Sending location...');
 
 	navigator.geolocation.getCurrentPosition(function (position) {
