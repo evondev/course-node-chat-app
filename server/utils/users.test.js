@@ -75,4 +75,21 @@ describe('Users', () => {
 
     expect(userList).toEqual(['Jen']);
   });
+
+  it('should return Mike in Node Course', () => {
+
+    var userList = users.getExistName("Mike","Node Course");
+
+    expect(userList).toEqual("Mike");
+
+  });
+
+  it('should not return Mike in Node Course', () => {
+
+    var userList = users.getExistName("Nam","Node Course");
+
+    expect(userList).toNotExist();
+
+  });
+
 });

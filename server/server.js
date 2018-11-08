@@ -4,7 +4,7 @@ const express = require('express');
 const socketIO = require('socket.io');
 
 const {generateMessage, generateLocationMessage} = require('./utils/message');
-const {isRealString} = require('./utils/validation');
+const {isRealString, isLowerText} = require('./utils/validation');
 const {Users} = require('./utils/users');
 
 const publicPath = path.join(__dirname, '/../public');
@@ -20,16 +20,21 @@ io.on('connection', (socket) => {
 	console.log('New user connected');
 
 	socket.on("join", (params, callback) => {
-		if (!isRealString(params.name) || !isRealString(params.room)) {
+		if (!isRealString(params.name) || !isRealString(isLowerText(params.room))) {
 			return callback("Name and room name are required");
 		}
-		socket.join(params.room);
-		users.removeUser(socket.id);
-		users.addUser(socket.id, params.name, params.room);
+		if(users.getExistName(params.name, isLowerText(params.room)) && users.getUserList(isLowerText(params.room)).length >=1) {
+			return callback("Your display name is already exist");
+		}
 
-		io.to(params.room).emit('updateUserList', users.getUserList(params.room));
+		socket.join(isLowerText(params.room));
+		users.removeUser(socket.id);
+		users.addUser(socket.id, params.name, isLowerText(params.room));
+
+		io.to(isLowerText(params.room)).emit('updateUserList', users.getUserList(isLowerText(params.room)));
 		socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
-		socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin',`${params.name} has joined.`));
+		socket.broadcast.to(isLowerText(params.room)).emit('newMessage', generateMessage('Admin',`${params.name} has joined.`));
+
 		callback();
 	});
 

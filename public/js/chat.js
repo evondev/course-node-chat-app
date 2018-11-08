@@ -18,8 +18,8 @@ function scrollToBottom() {
 }
 
 socket.on('connect', function () {
+	console.log("connect");
 	const params = jQuery.deparam(window.location.search);
-
 	socket.emit("join", params, function (err) {
 		if (err) {
 			alert(err);
